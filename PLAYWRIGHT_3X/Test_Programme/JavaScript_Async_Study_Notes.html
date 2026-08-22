@@ -1,0 +1,319 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>JavaScript Async Study Notes</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f8fafc;
+      color: #1f2937;
+      line-height: 1.7;
+    }
+
+    .container {
+      max-width: 950px;
+      margin: 0 auto;
+      padding: 30px 18px 50px;
+    }
+
+    .top {
+      background: linear-gradient(135deg, #1e3a8a, #2563eb);
+      color: white;
+      padding: 28px 24px;
+      border-radius: 16px;
+      margin-bottom: 22px;
+      box-shadow: 0 10px 25px rgba(37, 99, 235, 0.2);
+    }
+
+    .top h1 {
+      margin: 0 0 8px;
+      font-size: 2.3rem;
+    }
+
+    .tag {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      border-radius: 999px;
+      padding: 6px 12px;
+      font-size: 0.72rem;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-right: 8px;
+    }
+
+    .box {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 14px;
+      padding: 20px 22px;
+      margin-bottom: 20px;
+      box-shadow: 0 4px 14px rgba(15, 23, 42, 0.04);
+    }
+
+    h2 {
+      margin-top: 0;
+      color: #0f766e;
+      font-size: 1.8rem;
+    }
+
+    h3 {
+      color: #111827;
+      margin-bottom: 8px;
+    }
+
+    p, li {
+      color: #334155;
+      font-size: 1rem;
+    }
+
+    code {
+      background: #e2e8f0;
+      padding: 2px 6px;
+      border-radius: 5px;
+      font-family: Consolas, monospace;
+    }
+
+    pre {
+      background: #0f172a;
+      color: #e2e8f0;
+      border-radius: 10px;
+      padding: 16px;
+      overflow-x: auto;
+      margin: 12px 0;
+      font-size: 0.94rem;
+    }
+
+    .note {
+      background: #ecfdf5;
+      border-left: 4px solid #10b981;
+      padding: 12px 14px;
+      border-radius: 8px;
+      margin-top: 12px;
+    }
+
+    .warning {
+      background: #fff7ed;
+      border-left: 4px solid #f59e0b;
+      padding: 12px 14px;
+      border-radius: 8px;
+      margin-top: 12px;
+    }
+
+    .compare {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 16px;
+      margin-top: 16px;
+    }
+
+    .card {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 10px;
+      padding: 16px;
+    }
+
+    .output {
+      background: #ecfeff;
+      border: 1px solid #a5f3fc;
+      border-radius: 8px;
+      padding: 10px 12px;
+      margin-top: 12px;
+      font-family: Consolas, monospace;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <div class="top">
+      <div style="margin-bottom: 10px;">
+        <span class="tag">JavaScript</span>
+        <span class="tag">Async</span>
+        <span class="tag">Study Notes</span>
+      </div>
+      <h1>Async Programming in JavaScript</h1>
+      <p>Simple notes for learning asynchronous JavaScript.</p>
+    </div>
+
+    <div class="box">
+      <h2>1. Callback</h2>
+      <p>
+        A callback is a function passed to another function. It runs later, after a task finishes.
+      </p>
+
+      <pre><code>function fetchData(callback) {
+  setTimeout(() => {
+    callback("Data loaded");
+  }, 1000);
+}
+
+fetchData((result) => {
+  console.log(result);
+});</code></pre>
+
+      <p><strong>Good:</strong> Simple and easy to understand.</p>
+      <p><strong>Bad:</strong> Too many nested callbacks creates callback hell.</p>
+
+      <div class="warning">
+        Callback hell means code becomes difficult to read and maintain when functions are nested inside each other.
+      </div>
+    </div>
+
+    <div class="box">
+      <h2>2. Promise</h2>
+      <p>
+        A Promise is an object that represents a future result. It can be successful or failed.
+      </p>
+
+      <pre><code>const promise = new Promise((resolve, reject) => {
+  const done = true;
+
+  setTimeout(() => {
+    if (done) {
+      resolve("Success");
+    } else {
+      reject("Error");
+    }
+  }, 1000);
+});
+
+promise
+  .then((value) => console.log(value))
+  .catch((error) => console.log(error));</code></pre>
+
+      <p><strong>States of Promise:</strong></p>
+      <ul>
+        <li>pending - not finished yet</li>
+        <li>fulfilled - success</li>
+        <li>rejected - failure</li>
+      </ul>
+    </div>
+
+    <div class="box">
+      <h2>3. Async</h2>
+      <p>
+        The keyword <code>async</code> is used before a function to make it asynchronous.
+      </p>
+
+      <pre><code>async function showMessage() {
+  return "Hello";
+}
+
+showMessage().then((msg) => console.log(msg));</code></pre>
+
+      <p>
+        An async function always returns a Promise automatically.
+      </p>
+
+      <div class="note">
+        This makes async code easier to write and read than callback-based code.
+      </div>
+    </div>
+
+    <div class="box">
+      <h2>4. Await</h2>
+      <p>
+        The keyword <code>await</code> pauses execution inside an async function until the Promise finishes.
+      </p>
+
+      <pre><code>async function getData() {
+  const result = await new Promise((resolve) => {
+    setTimeout(() => resolve("Loaded"), 2000);
+  });
+
+  console.log(result);
+}
+
+getData();</code></pre>
+
+      <p>
+        <code>await</code> makes asynchronous code look more like normal sequential code.
+      </p>
+
+      <div class="note">
+        You can use <code>await</code> only inside an <code>async</code> function.
+      </div>
+    </div>
+
+    <div class="box">
+      <h2>5. Promise.all</h2>
+      <p>
+        <code>Promise.all()</code> waits for all promises to finish before continuing.
+      </p>
+
+      <pre><code>const p1 = Promise.resolve("A");
+const p2 = new Promise((resolve) => setTimeout(() => resolve("B"), 1000));
+const p3 = new Promise((resolve) => setTimeout(() => resolve("C"), 2000));
+
+Promise.all([p1, p2, p3]).then((values) => {
+  console.log(values);
+});</code></pre>
+
+      <div class="output">[ 'A', 'B', 'C' ]</div>
+
+      <p><strong>Use case:</strong> When all tasks must complete before moving ahead.</p>
+    </div>
+
+    <div class="box">
+      <h2>6. Promise.race</h2>
+      <p>
+        <code>Promise.race()</code> returns the result of the first promise that settles.
+      </p>
+
+      <pre><code>const slow = new Promise((resolve) => setTimeout(() => resolve("Slow"), 2000));
+const fast = new Promise((resolve) => setTimeout(() => resolve("Fast"), 500));
+
+Promise.race([slow, fast]).then((result) => {
+  console.log(result);
+});</code></pre>
+
+      <div class="output">Fast</div>
+
+      <p><strong>Use case:</strong> When you want to get the fastest response.</p>
+    </div>
+
+    <div class="box">
+      <h2>Comparison</h2>
+      <div class="compare">
+        <div class="card">
+          <h3>Promise.all</h3>
+          <ul>
+            <li>Waits for all</li>
+            <li>Returns all results</li>
+            <li>Fails if one fails</li>
+          </ul>
+        </div>
+
+        <div class="card">
+          <h3>Promise.race</h3>
+          <ul>
+            <li>Returns first result</li>
+            <li>Does not wait for all</li>
+            <li>Faster response wins</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+
+    <div class="box">
+      <h2>Short Summary</h2>
+      <ul>
+        <li><strong>Callback</strong> = function called later.</li>
+        <li><strong>new Promise</strong> = handles async success/failure.</li>
+        <li><strong>async</strong> = makes function asynchronous.</li>
+        <li><strong>await</strong> = waits for Promise result.</li>
+        <li><strong>Promise.all</strong> = wait for all tasks.</li>
+        <li><strong>Promise.race</strong> = use the first finished task.</li>
+      </ul>
+
+      <div class="note">
+        In modern JavaScript, <code>async</code> and <code>await</code> are the most common and readable way to handle asynchronous work.
+      </div>
+    </div>
+  </div>
+</body>
+</html>
